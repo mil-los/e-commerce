@@ -4,8 +4,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
-            services.AddSwaggerGen(s => 
-            );
+            services.AddSwaggerGen();
 
             return services;
         }

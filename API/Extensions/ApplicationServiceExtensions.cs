@@ -10,18 +10,17 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.Configure<ApiBehaviorOptions>(opt =>
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.Configure<ApiBehaviorOptions>(options => 
             {
-                opt.InvalidModelStateResponseFactory = actionContext =>
+                options.InvalidModelStateResponseFactory = actionContext => 
                 {
                     var errors = actionContext.ModelState
                         .Where(e => e.Value.Errors.Any())
                         .SelectMany(x => x.Value.Errors)
-                        .Select(x => x.ErrorMessage)
-                        .ToArray();
+                        .Select(x => x.ErrorMessage).ToArray();
 
-                    var errorResponse = new ApiValitationErrorResponse
+                    var errorResponse = new ApiValidationErrorResponse
                     {
                         Errors = errors
                     };
@@ -29,7 +28,7 @@ namespace API.Extensions
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
-            
+
             return services;
         }
     }

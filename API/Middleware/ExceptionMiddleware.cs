@@ -18,7 +18,7 @@ namespace API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            try
+            try 
             {
                 await _next(context);
             }
@@ -27,7 +27,7 @@ namespace API.Middleware
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                
+
                 var response = _env.IsDevelopment()
                     ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
                     : new ApiException((int)HttpStatusCode.InternalServerError);
@@ -36,8 +36,6 @@ namespace API.Middleware
                 var json = JsonSerializer.Serialize(response, options);
 
                 await context.Response.WriteAsync(json);
-
-
             }
         }
     }
